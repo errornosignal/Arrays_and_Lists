@@ -1,5 +1,5 @@
 
-public interface MyList<E extends Comparable<? super E>>{
+public interface MyList<E>{
     int size();
     boolean isEmpty();
     boolean add(E element);
@@ -8,5 +8,6 @@ public interface MyList<E extends Comparable<? super E>>{
     boolean set (int index, E element); //update
     boolean insert(int index, E element); //add with style
     int indexOf(E element);
+    void clear();
 
 }

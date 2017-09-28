@@ -58,33 +58,98 @@ public class MyLinkedList <E> implements MyList<E> {
         Node<E> current = this.getNode(index);
 
         if (this.size == 1) {
-
+            E data = this.first.value;
+            this.first = null;
+            this.last = null;
+            this.size--;
+            return data;
         }//more than one element in the list doNothing()
 
+        E data = current.value;
         if (current == this.first) {
+            Node<E> next = this.first.next;
+            Node<E> oldFirst = this.first;
+            this.first = next;
+            this.first.previous = null;
+            oldFirst.next = null;
             //remove the first element
         }
+
         else if (current == this.last) {
+            Node<E> previous = this.last.previous;
+            Node<E> oldLast = this.last;
+            this.last = previous;
+            this.last.next = null;
+            oldLast.previous = null;
             //remove the last element
         }
+
         else {
+            current.next.previous = current.previous;
+            current.previous.next = current.next;
+            current.next = null;
+            current.previous = null;
             //remove the nth element of the list
         }
-
+        this.size--;
+        return data;
     }
 
     @Override
-    public boolean set(int index, Comparable element) {
+    public boolean set(int index, E element) {
+        this.getNode(index).value = element;
         return false;
     }
 
     @Override
-    public boolean insert(int index, Comparable element) {
-        return false;
+    public boolean insert(int index, E element) {
+        Node<E> newNode = new Node<>(element);
+        Node<E> current = this.getNode(index);
+
+        if (current == this.first || this.size == 1){
+            //we know if the size is 1, first and last are the same
+            this.first.previous = newNode;
+            newNode.next = this.first;
+            newNode.previous = null;
+            this.first = newNode;
+        }
+        else{
+            newNode.next = current;
+            newNode.previous = current.previous;
+            current.previous = newNode;
+            newNode.previous.next = newNode;
+        }
+        this.size++;
+        return true;
     }
 
     @Override
-    public int indexOf(Comparable element) {
-        return 0;
+    public int indexOf(E element) {
+        Node<E> current = this.first;
+        int index = 0;
+        while(!current.value.equals(element) && index < this.size) {
+            if(current.value.equals(element)){
+                return index;
+            }//lse, not the value for which we are looking doNothing();
+            index++;
+            current = current.next;
+        }
+        return -1;
+
     }
+    @Override
+    public void clear() {
+        Node<E> element = this.first.next;
+        while (element != null) {
+            Node<E> next = element.next;
+            element.next = element.previous = null;
+            element.value = null;
+            element = next;
+        }
+        this.first.value = null;
+        this.first.next = this.first.previous = this.first;
+        this.size = 0;
+    }
+
+
 }

@@ -82,4 +82,7 @@ public class MyArrayList<E> implements MyList<E> {
     public int indexOf(E element) {
         return 0;
     }
+
+    @Override
+    public void clear() { }
 }
